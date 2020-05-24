@@ -20,7 +20,7 @@ public class MainWindow {
 	private long window;
 	
 	public void run() {
-		System.out.println("sir "+Version.getVersion());
+		System.out.println("version - "+Version.getVersion());
 		float i = -1.0f;
 		init(); //sets up window context, settings
 		loop(i); 
@@ -105,7 +105,11 @@ public class MainWindow {
 		glEnable(GL_TEXTURE_2D);
 		
 		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-		
+		/*
+		float[] p3 = Quat_Processes.rand3Points();
+		System.out.println(p3[0]+", "+p3[1]+", "+p3[2]);
+		System.out.println((p3[0]*p3[0])+(p3[1]*p3[1])+(p3[2]*p3[2]));
+		*/
 		Cube cube1 = new Cube(0.25f);
 		
 		//run loop until the user closes or presses esc
@@ -116,12 +120,17 @@ public class MainWindow {
 			cube1.draw();
 			
 			
+			
 			glfwSwapBuffers(window);//swap color buffers
 			
 			//input
 			if(glfwGetKey(window, GLFW_KEY_A)==GL_TRUE) {
+				//set the current quat
+				
+				
+				
 				Quat_Processes.run(cube1);
-				System.out.println("you pressed the a key SIR");
+				//System.out.println("you pressed the a key SIR");
 			}
 			glfwPollEvents(); //checks for window events
 		}
