@@ -11,37 +11,46 @@ public class Cube {
 	private Quat[] lvertices = new Quat[8];//local vertices
 	private Quat[] vertices = new Quat[8];
 	private Quat[] basisVectors  = new Quat[3];
-	//vertices is a list of quats
+	SLERP slerp1;
 	
+	//vertices is a list of quats
 	public Cube(float radius) {
 		
 		//init local verts
-		lvertices[0] = new Quat(0,radius, radius, radius);
+		lvertices[0] = new Quat(0,radius, radius*0.5f, radius*0.5f);
 		lvertices[1] = new Quat(0,-radius, radius, radius);
 		lvertices[2] = new Quat(0,-radius, -radius, radius);
-		lvertices[3] = new Quat(0,radius, -radius, radius);
+		lvertices[3] = new Quat(0,radius, -radius*0.5f, radius*0.5f);
 		
-		lvertices[4] = new Quat(0,radius, radius, -radius);
+		lvertices[4] = new Quat(0,radius, radius*0.5f, -radius*0.5f);
 		lvertices[5] = new Quat(0,-radius, radius, -radius);
 		lvertices[6] = new Quat(0,-radius, -radius, -radius);
-		lvertices[7] = new Quat(0,radius, -radius, -radius);
+		lvertices[7] = new Quat(0,radius, -radius*0.5f, -radius*0.5f);
 		
 		
 		//init global vert
-		vertices[0] = new Quat(0,radius, radius, radius);
+		vertices[0] = new Quat(0,radius, radius*0.5f, radius*0.5f);
 		vertices[1] = new Quat(0,-radius, radius, radius);
 		vertices[2] = new Quat(0,-radius, -radius, radius);
-		vertices[3] = new Quat(0,radius, -radius, radius);
+		vertices[3] = new Quat(0,radius, -radius*0.5f, radius*0.5f);
 		
-		vertices[4] = new Quat(0,radius, radius, -radius);
+		vertices[4] = new Quat(0,radius, radius*0.5f, -radius*0.5f);
 		vertices[5] = new Quat(0,-radius, radius, -radius);
 		vertices[6] = new Quat(0,-radius, -radius, -radius);
-		vertices[7] = new Quat(0,radius, -radius, -radius);
+		vertices[7] = new Quat(0,radius, -radius*0.5f, -radius*0.5f);
 		
 		//init local axes
-		basisVectors[0] = new Quat(0,1,0,0);
-		basisVectors[1] = new Quat(0,0,1,0);
-		basisVectors[2] = new Quat(0,0,0,1);
+		basisVectors = init_basis_vects();
+		
+		slerp1 = new SLERP(this);
+	}
+	
+	private Quat[] init_basis_vects() {
+		Quat[] vects = new Quat[3];
+		vects[0] = new Quat(0,1,0,0);
+		vects[1] = new Quat(0,0,1,0);
+		vects[2] = new Quat(0,0,0,1);
+		return vects;
 	}
 	
 	public void draw() {
@@ -103,17 +112,8 @@ public class Cube {
 	}
 	
 	
-	/*
-	//public update vertices(quat x wuat y quat z -- all local)
-		//for each vertex:
-		//	vertex_x = xl*xi + yl*yi + zl*zi
-		 * 
-		 * 
-		
-		 */
 	public void updateVertices() {
-		for(int v = 0; v < lvertices.length; v ++) {
-			//surround all of this in a for loop iterating over all local vertices
+		for(int v = 0; v < lvertices.length; v ++) {//iterating over all local vertices
 			float x = lvertices[v].get(1);
 			float y = lvertices[v].get(2);
 			float z = lvertices[v].get(3);
@@ -123,7 +123,7 @@ public class Cube {
 			SimpleMatrix local_coords_mat = new SimpleMatrix(local_coords);
 			
 			
-			//matrix mult transform matrix local coords --> global
+			//matrix mult -  transform matrix*local coords --> global
 			//change of basis matrix - [i, j, k] -> 
 			/*[ix, jx, kx]
 			 *[iy, jy, ky]
@@ -140,21 +140,27 @@ public class Cube {
 			
 			SimpleMatrix transf_mat = new SimpleMatrix(transform_matrix);
 			SimpleMatrix global_coords = transf_mat.mult(local_coords_mat);
-	
 			vertices[v] = new Quat(
 					0, 
 					(float)global_coords.get(0,0),
 					(float)global_coords.get(1,0),
 					(float)global_coords.get(2,0)
 					);
+			//System.out.println(vertices[0].get(1));
 		}
 		
 		
 	}
-	public Quat getBasisVector(int i) {
+	public Quat getBasisVector(int i) {//returns a single basis vector
 		return basisVectors[i];
 	}
 	public void setBasisVector(int i, Quat newVect) {
 		basisVectors[i] = newVect;
+	}
+	public Quat[] get_basis() {//returns the array of basis vectors
+		return basisVectors;
+	}
+	public void set_basis(Quat[] new_basis) {
+		basisVectors = new_basis;
 	}
 }

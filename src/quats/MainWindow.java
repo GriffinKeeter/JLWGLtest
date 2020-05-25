@@ -19,6 +19,10 @@ public class MainWindow {
 	//window handle
 	private long window;
 	
+	public static void main(String[] args) {
+		new MainWindow().run();
+	}
+	
 	public void run() {
 		System.out.println("version - "+Version.getVersion());
 		float i = -1.0f;
@@ -105,33 +109,32 @@ public class MainWindow {
 		glEnable(GL_TEXTURE_2D);
 		
 		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-		/*
-		float[] p3 = Quat_Processes.rand3Points();
-		System.out.println(p3[0]+", "+p3[1]+", "+p3[2]);
-		System.out.println((p3[0]*p3[0])+(p3[1]*p3[1])+(p3[2]*p3[2]));
-		*/
+
 		Cube cube1 = new Cube(0.25f);
-		
+		Arrow a1 = new Arrow();
 		//run loop until the user closes or presses esc
+		
+		int prev_key = GL_FALSE; //this variable to to prevent a key press from returning GLTRUE repeatedly while it is held down
 		while(!glfwWindowShouldClose(window)) {//breaks the loop
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clears framebuffer
 			glEnable(GL_DEPTH_TEST);
 			
+			
 			cube1.draw();
+			cube1.slerp1.slerp_master();
 			
-			
-			
-			glfwSwapBuffers(window);//swap color buffers
-			
-			//input
-			if(glfwGetKey(window, GLFW_KEY_A)==GL_TRUE) {
-				//set the current quat
-				
-				
-				
-				Quat_Processes.run(cube1);
-				//System.out.println("you pressed the a key SIR");
+			a1.draw(cube1.slerp1.get_target_vector());
+
+		
+			if(glfwGetKey(window, GLFW_KEY_A) == GL_TRUE) {
+				if(prev_key == GL_FALSE) {
+					cube1.slerp1.change_orientation();
+				}
+				prev_key = GL_TRUE;
+			}else {
+				prev_key = GL_FALSE;
 			}
+			glfwSwapBuffers(window);//swap color buffers
 			glfwPollEvents(); //checks for window events
 		}
 	}

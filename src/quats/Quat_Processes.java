@@ -4,10 +4,6 @@ import java.util.*;
 
 public class Quat_Processes {
 	
-	public static void main(String[] args) {
-		new MainWindow().run();
-	}
-	
 	public static void run(Cube cube) {//called from loop in mainwindow
 
 		//init rotation quat;
@@ -29,6 +25,7 @@ public class Quat_Processes {
 		
 	}
 	
+	//public change 
 	
 	public static Quat generate_Versor(float angle, float[] axis) {
 		Quat versor = new Quat(
@@ -38,33 +35,5 @@ public class Quat_Processes {
 				(float)(Math.sin(angle/2)*axis[2])
 				);
 		return versor;
-	}
-	
-	public static Quat SLERP(Quat v0, Quat v1, float t) {
-		//takes an initial vector, a target vector, and t (0-1)
-		//both vectors should be unit? with w = 0
-		
-		//calculate the angle between the vectors
-		//find orthogonal vector v2 to v0 using v1 to use as unit
-		//new angle a = t * prev_angle
-		//new vector = cos(a)v0 + sin(a)v2
-		//create new Quat with that, and return
-		return v0;
-	}
-	
-	public static float[] rand3Points() {
-		float[] rand3 = new float[3];
-		
-		rand3[0] = (float)Math.random();
-		rand3[1] = (float)Math.random();
-		rand3[2] = (float)Math.random();
-		
-		float mag = (float)Math.sqrt(rand3[0]*rand3[0])+(rand3[1]*rand3[1])+(rand3[2]*rand3[2]);
-		
-		rand3[0] /= mag;
-		rand3[1] /= mag;
-		rand3[2] /= mag;
-		
-		return rand3;
 	}
 }
