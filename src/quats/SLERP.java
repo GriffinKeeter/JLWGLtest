@@ -19,7 +19,6 @@ public class SLERP {
 		if(t<1.0f) {
 			t += 0.05f;
 		}
-		System.out.println(t);
 		Quat pointer = transition_vect(prev_pointVector, next_pointVector, t);
 		Quat[] new_basis = generate_Basis(pointer);
 		

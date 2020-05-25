@@ -52,9 +52,9 @@ public class MainWindow {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);//window will be resizable
 		
 		//create window
-		window = glfwCreateWindow(300,300, "yes sir", NULL, NULL);//the window is the context
+		window = glfwCreateWindow(300,300, "Press the A key to choose random orientation", NULL, NULL);//the window is the context
 		if(window == NULL) {
-			throw new RuntimeException("the window could not be created sir");
+			throw new RuntimeException("the window could not be created");
 		}
 		
 		//set up key callback - called whenever a key is pressed
